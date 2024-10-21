@@ -38,4 +38,6 @@ define Package/byedpi/install
 	$(INSTALL_CONF) ./files/byedpi.config $(1)/etc/config/byedpi
 endef
 
+TARGET_CFLAGS += -Os
+
 $(eval $(call BuildPackage,byedpi))

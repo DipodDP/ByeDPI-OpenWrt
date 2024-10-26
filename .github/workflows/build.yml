@@ -10,26 +10,8 @@ jobs:
       tag: ${{ steps.prepare.outputs.tag }}
     strategy:
       matrix:
-        branch: [openwrt-19.07, openwrt-21.02, openwrt-22.03, openwrt-23.05]
+        branch: [openwrt-19.07]
         arch:
-          - aarch64_cortex-a53
-          - aarch64_cortex-a72
-          - aarch64_generic
-          - arm_arm1176jzf-s_vfp
-          - arm_arm926ej-s
-          - arm_cortex-a15_neon-vfpv4
-          - arm_cortex-a5_vfpv4
-          - arm_cortex-a7
-          - arm_cortex-a7_neon-vfpv4
-          - arm_cortex-a7_vfpv4
-          - arm_cortex-a8_vfpv3
-          - arm_cortex-a9
-          - arm_cortex-a9_neon
-          - arm_cortex-a9_vfpv3-d16
-          - arm_fa526
-          - arm_mpcore
-          - arm_xscale
-          - mips64_octeonplus
           - mips_24kc
           - mips_4kec
           - mips_mips32
@@ -37,16 +19,10 @@ jobs:
           - mipsel_24kc_24kf
           - mipsel_74kc
           - mipsel_mips32
-          - x86_64
+          - mips_4kec
         exclude:
           - branch: openwrt-19.07
-            arch: arm_cortex-a7
-          - branch: openwrt-19.07
-            arch: arm_cortex-a7_vfpv4
-          - branch: openwrt-19.07
             arch: mips_4kec
-          - branch: openwrt-21.02
-            arch: arm_cortex-a7_vfpv4
         include:
           - branch: SNAPSHOT
             arch: x86_64
@@ -81,7 +57,7 @@ jobs:
           ./scripts/feeds update byedpi
           ./scripts/feeds install -a -p byedpi
           make defconfig
-          make package/byedpi/compile V=s -j$(nproc) BUILD_LOG=1
+          make package/byedpi/compile V=sc -j$(nproc) BUILD_LOG=1
           echo "$SIGN_KEY" | base64 -d > key-build
           make package/index
           tar -C ./bin/packages/*/byedpi -cvf ipk-$BRANCH-$ARCH.tar --transform "s|^\./|${BRANCH/openwrt-}/$ARCH/|" --show-transformed-names .
